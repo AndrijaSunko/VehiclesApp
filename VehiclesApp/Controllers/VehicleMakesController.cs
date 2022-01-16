@@ -21,9 +21,52 @@ namespace VehiclesApp.Controllers
         }
 
         // GET: VehicleMakes
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(
+                                                string sortOrder,
+                                                string currentFilter,
+                                                string searchString,
+                                                int? pageNumber)
+
         {
-            return View(await _context.VehicleMake.ToListAsync());
+            ViewData["CurrentSort"] = sortOrder;
+            ViewData["NameSortParm"] = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
+            ViewData["AbrvSortParm"] = String.IsNullOrEmpty(sortOrder) ? "abrv_desc" : "";
+
+            if (searchString != null)
+            {
+                pageNumber = 1;
+            }
+            else
+            {
+                searchString = currentFilter;
+            }
+
+
+            ViewData["CurrentFilter"] = searchString;
+
+            var vehicleMakes = from s in _context.VehicleMake
+                           select s;
+
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                vehicleMakes = vehicleMakes.Where(s => s.Name.Contains(searchString)
+                                       || s.Abrv.Contains(searchString));
+            }
+
+            switch (sortOrder)
+            {
+                case "name_desc":
+                    vehicleMakes = vehicleMakes.OrderByDescending(s => s.Name);
+                    break;
+                case "Abrv_desc":
+                    vehicleMakes = vehicleMakes.OrderByDescending(s => s.Abrv);
+                    break;
+                default:
+                    vehicleMakes = vehicleMakes.OrderBy(s => s.Name);
+                    break;
+            }
+            int pageSize = 3;
+            return View(await PaginatedList<VehicleMake>.CreateAsync(vehicleMakes.AsNoTracking(), pageNumber ?? 1, pageSize));
         }
 
         // GET: VehicleMakes/Details/5
