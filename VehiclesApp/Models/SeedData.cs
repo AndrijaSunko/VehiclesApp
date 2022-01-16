@@ -49,21 +49,21 @@ namespace VehiclesApp.Models
 
                     new VehicleModel
                     {
-                        MakeId = 1,
+                        MakeId = 100,
                         Name = "x5",
                         Abrv = "x5",
 
                     },
                     new VehicleModel
                     {
-                        MakeId = 2,
+                        MakeId = 200,
                         Name = "Golf",
                         Abrv = "Golf",
 
                     },
                     new VehicleModel
                     {
-                        MakeId = 3,
+                        MakeId = 300,
                         Name = "Model T",
                         Abrv = "MT",
 

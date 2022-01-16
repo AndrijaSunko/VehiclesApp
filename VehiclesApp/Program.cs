@@ -8,6 +8,7 @@ builder.Services.AddDbContext<VehiclesAppContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("VehiclesAppContext")));
 
 // Add services to the container.
+
 builder.Services.AddControllersWithViews();
 
 var app = builder.Build();
@@ -31,6 +32,7 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
+
 
 app.UseAuthorization();
 
