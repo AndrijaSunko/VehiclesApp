@@ -50,22 +50,23 @@ namespace VehiclesApp.Models
                     new VehicleModel
                     {
                         MakeId = 100,
-                        Name = "x5",
+                        Name = "BMW",
                         Abrv = "x5",
+
 
                     },
                     new VehicleModel
                     {
                         MakeId = 200,
-                        Name = "Golf",
+                        Name = "Volkswagen",
                         Abrv = "Golf",
 
                     },
                     new VehicleModel
                     {
                         MakeId = 300,
-                        Name = "Model T",
-                        Abrv = "MT",
+                        Name = "Ford",
+                        Abrv = "Focus",
 
                     }
 

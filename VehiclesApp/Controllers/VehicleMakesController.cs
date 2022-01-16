@@ -35,6 +35,8 @@ namespace VehiclesApp.Controllers
             }
 
             var vehicleMake = await _context.VehicleMake
+                .Include(s => s.VehicleModels)
+                .AsNoTracking()
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (vehicleMake == null)
             {
@@ -55,13 +57,24 @@ namespace VehiclesApp.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,Abrv")] VehicleMake vehicleMake)
+        public async Task<IActionResult> Create([Bind("Name,Abrv")] VehicleMake vehicleMake)
         {
-            if (ModelState.IsValid)
+            try
             {
-                _context.Add(vehicleMake);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                if (ModelState.IsValid)
+                {
+                    _context.Add(vehicleMake);
+                    await _context.SaveChangesAsync();
+                    return RedirectToAction(nameof(Index));
+                }
+                
+            }
+            catch (DbUpdateException /* ex */)
+            {
+                //Log the error (uncomment ex variable name and write a log.
+                ModelState.AddModelError("", "Unable to save changes. " +
+                    "Try again, and if the problem persists " +
+                    "see your system administrator.");
             }
             return View(vehicleMake);
         }
@@ -118,7 +131,7 @@ namespace VehiclesApp.Controllers
         }
 
         // GET: VehicleMakes/Delete/5
-        public async Task<IActionResult> Delete(int? id)
+        public async Task<IActionResult> Delete(int? id, bool? saveChangesError = false)
         {
             if (id == null)
             {
@@ -126,10 +139,18 @@ namespace VehiclesApp.Controllers
             }
 
             var vehicleMake = await _context.VehicleMake
+                .AsNoTracking()
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (vehicleMake == null)
             {
                 return NotFound();
+            }
+
+            if (saveChangesError.GetValueOrDefault())
+            {
+                ViewData["ErrorMessage"] =
+                    "Delete failed. Try again, and if the problem persists " +
+                    "see your system administrator.";
             }
 
             return View(vehicleMake);
@@ -141,9 +162,24 @@ namespace VehiclesApp.Controllers
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var vehicleMake = await _context.VehicleMake.FindAsync(id);
-            _context.VehicleMake.Remove(vehicleMake);
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            if (vehicleMake == null)
+            {
+                return RedirectToAction(nameof(Index));
+            }
+
+            try
+            {
+                _context.VehicleMake.Remove(vehicleMake);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
+            }
+
+            catch (DbUpdateException /* ex */)
+            {
+                //Log the error (uncomment ex variable name and write a log.)
+                return RedirectToAction(nameof(Delete), new { id = id, saveChangesError = true });
+            }
+           
         }
 
         private bool VehicleMakeExists(int id)
