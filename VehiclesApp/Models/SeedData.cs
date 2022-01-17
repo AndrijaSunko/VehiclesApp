@@ -24,7 +24,7 @@ namespace VehiclesApp.Models
                 context.VehicleMake.AddRange(
 
                     new VehicleMake
-                    {
+                    {                        
                         Name = "BMW",
                         Abrv = "BMW"
                     },
@@ -39,9 +39,21 @@ namespace VehiclesApp.Models
                     {
                         Name = "Ford",
                         Abrv = "Ford"
+                    },
+                    new VehicleMake
+                    {
+                        Name = "Citroen",
+                        Abrv = "Cit"
+                    },
+                    new VehicleMake
+                    {
+                        Name = "Rolls Royce",
+                        Abrv = "RR"
                     }
 
-                    
+
+
+
                 );
                 context.SaveChanges();
 
@@ -52,22 +64,30 @@ namespace VehiclesApp.Models
                         MakeId = 100,
                         Name = "BMW",
                         Abrv = "x5",
-
-
                     },
                     new VehicleModel
                     {
                         MakeId = 200,
                         Name = "Volkswagen",
                         Abrv = "Golf",
-
                     },
                     new VehicleModel
                     {
                         MakeId = 300,
                         Name = "Ford",
                         Abrv = "Focus",
-
+                    },
+                    new VehicleModel
+                    {
+                        MakeId = 400,
+                        Name = "Citroen",
+                        Abrv = "C5",
+                    },
+                    new VehicleModel
+                    {
+                        MakeId = 500,
+                        Name = "Rolls Royce",
+                        Abrv = "PE",
                     }
 
 
